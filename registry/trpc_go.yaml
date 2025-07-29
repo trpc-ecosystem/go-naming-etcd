@@ -1,0 +1,26 @@
+plugins:
+  registry:
+    etcd:
+      address: 127.0.0.1:2379
+      timeout: 5
+      prefix: /registry
+      service:
+        - name: trpc.test.helloworld.Greeter1    #service name 与上面的service配置一一对应
+          ttl: 5
+          metadata:
+            tags: helloworld
+
+client: #客户端调用的后端配置
+  service: #针对单个后端的配置
+    - callee: trpc.test.helloworld.Greeter
+      target: etcd://trpc.test.helloworld.Greeter
+      network: tcp
+      protocol: http
+      timeout: 1000
+      serialization: 2
+    - callee: trpc.test.helloworld.Greeter1
+      target: etcd://trpc.test.helloworld.Greeter1
+      network: tcp
+      protocol: http
+      timeout: 1000
+      serialization: 2
